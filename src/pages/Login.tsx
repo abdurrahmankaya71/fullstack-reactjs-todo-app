@@ -8,7 +8,7 @@ const Login = () => {
       <form className="space-y-4">
         <Input placeholder="Email Address" />
         <Input placeholder="Password" />
-        <Button fullWidth>Register</Button>
+        <Button fullWidth>Login</Button>
       </form>
     </div>
   );
