@@ -6,8 +6,14 @@ import { IRegisterInput } from "../interfaces/index";
 import { REGISTER_FORM } from "../data";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerSchema } from "../validation";
+import axiosInstance from "../config/axios.config";
+import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const RegisterPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -15,15 +21,36 @@ const RegisterPage = () => {
   } = useForm<IRegisterInput>({ resolver: yupResolver(registerSchema) });
 
   //! Handlers
-  const onSubmit: SubmitHandler<IRegisterInput> = (data) => {
+  const onSubmit: SubmitHandler<IRegisterInput> = async (data) => {
     console.log(data);
-
-    /**
-     * 1- Pending
-     * 2- Fulfilled => Success => optional
-     * 3- Rejected => Failed => optional
-     **
-     */
+    //!  1- Pending
+    setIsLoading(true);
+    try {
+      //! 2- Fulfilled => Success => optional
+      const { status } = await axiosInstance.post("/auth/local/register", data);
+      if (status === 200) {
+        toast.success(
+          "You will navigate to the login page after 3 seconds to login.",
+          {
+            position: "bottom-center",
+            duration: 1500,
+            style: {
+              backgroundColor: "black",
+              color: "white",
+              width: "fit-content",
+            },
+          }
+        );
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      }
+      console.log(status);
+    } catch (error) {
+      //! 3- Rejected => Failed => optional
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   //! Renders
@@ -47,8 +74,11 @@ const RegisterPage = () => {
       </h2>
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
         {renderRegisterForm}
-        <Button fullWidth>Register</Button>
+        <Button fullWidth isLoading={isLoading}>
+          Register
+        </Button>
       </form>
+      <Toaster />
     </div>
   );
 };
