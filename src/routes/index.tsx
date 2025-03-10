@@ -9,8 +9,11 @@ import RegisterPage from "../pages/Register";
 import RootLayout from "../pages/Layout";
 import ProtectedRoute from "../components/auth/ProtectedRoutes";
 
-//! temp
-export const isLoggedIn = false;
+//* local storage
+const userDataString = localStorage.getItem("loggedInUser");
+const userData = userDataString ? JSON.parse(userDataString) : null;
+
+const isLoggedIn = userData === null ? false : true;
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,8 +27,22 @@ const router = createBrowserRouter(
             </ProtectedRoute>
           }
         />
-        <Route path="login" element={<LoginPage />} />
-        <Route path="register" element={<RegisterPage />} />
+        <Route
+          path="login"
+          element={
+            <ProtectedRoute isAllowed={!isLoggedIn} redirectPath="/">
+              <LoginPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="register"
+          element={
+            <ProtectedRoute isAllowed={!isLoggedIn} redirectPath="/">
+              <RegisterPage />
+            </ProtectedRoute>
+          }
+        />
       </Route>
     </>
   )

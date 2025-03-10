@@ -1,7 +1,6 @@
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { LOGIN_FORM } from "../data";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IErrorResponse, ILoginInput } from "../interfaces";
@@ -15,7 +14,7 @@ import axiosInstance from "../config/axios.config";
 const Login = () => {
   //! states
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -29,7 +28,11 @@ const Login = () => {
     setIsLoading(true);
     try {
       //! 2- Fulfilled => Success => optional
-      const { status } = await axiosInstance.post("/auth/local", data);
+      const { status, data: resData } = await axiosInstance.post(
+        "/auth/local",
+        data
+      );
+      console.log(resData);
       if (status === 200) {
         toast.success(
           "Sec You will navigate to the home page after 3 seconds.",
@@ -43,9 +46,10 @@ const Login = () => {
             },
           }
         );
+        localStorage.setItem("loggedInUser", JSON.stringify(resData));
         setTimeout(() => {
-          navigate("/");
-        }, 3000);
+          location.replace("/");
+        }, 1000);
       }
       console.log(status);
     } catch (error) {

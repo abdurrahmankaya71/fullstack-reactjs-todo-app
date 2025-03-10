@@ -4,25 +4,21 @@ export default {
   theme: {
     extend: {},
     container: {
-      // you can configure the container to be centered
-      center: true,
-
-      // or have default horizontal padding
+      center: true, 
       padding: {
-        DEFAULT: "1rem",
-        sm: "2rem",
-        lg: "4rem",
-        xl: "5rem",
-        "2xl": "6rem",
+        DEFAULT: "1rem", 
+        sm: "1.5rem",
+        md: "2rem",
+        lg: "2.5rem",
+        xl: "3rem",
+        "2xl": "4rem",
       },
-
-      // default breakpoints but with 40px removed
       screens: {
-        sm: "600px",
-        md: "728px",
-        lg: "984px",
-        xl: "1100px",
-        "2xl": "1496px",
+        sm: "540px", 
+        md: "720px", 
+        lg: "960px", 
+        xl: "1140px", 
+        "2xl": "1320px", 
       },
     },
   },
