@@ -2,16 +2,18 @@ import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { useForm, SubmitHandler } from "react-hook-form";
 import InputErrorMessage from "../components/ui/InputErrorMessage";
-import { IRegisterInput } from "../interfaces/index";
+import { IErrorResponse, IRegisterInput } from "../interfaces/index";
 import { REGISTER_FORM } from "../data";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerSchema } from "../validation";
 import axiosInstance from "../config/axios.config";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { AxiosError } from "axios";
 
 const RegisterPage = () => {
+  //! states
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const {
@@ -47,6 +49,18 @@ const RegisterPage = () => {
       }
       console.log(status);
     } catch (error) {
+      const errorObj = error as AxiosError<IErrorResponse>;
+      // console.log(errorObj.response?.data?.error?.message);
+      toast.error(`${errorObj.response?.data?.error?.message}`, {
+        position: "bottom-center",
+        duration: 2000,
+        style: {
+          backgroundColor: "black",
+          color: "white",
+          width: "fit-content",
+        },
+      });
+
       //! 3- Rejected => Failed => optional
     } finally {
       setIsLoading(false);
@@ -78,7 +92,6 @@ const RegisterPage = () => {
           Register
         </Button>
       </form>
-      <Toaster />
     </div>
   );
 };

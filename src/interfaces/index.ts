@@ -16,7 +16,12 @@ export interface IRegisterForm {
 }
 
 export interface ILoginInput {
-  name: "identifier" | "password";
+  identifier: string;
+  password: string;
+}
+
+export interface ILoginForm {
+  name: keyof ILoginInput;
   placeholder: string;
   type: string;
   validation: {
@@ -27,7 +32,7 @@ export interface ILoginInput {
 }
 
 export interface IErrorResponse {
-  error: {
+ error: {
     details?: {
       errors: {
         message: string;
