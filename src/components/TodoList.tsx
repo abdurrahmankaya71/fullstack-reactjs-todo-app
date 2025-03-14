@@ -1,21 +1,16 @@
-import axiosInstance from "../config/axios.config";
+import useAuthenticatedQuery from "../hooks/useAuthenticatedQuery";
 import ErrorHandler from "./errors/ErrorHandler";
 import Button from "./ui/Button";
-import { useQuery } from "@tanstack/react-query";
 
 const TodoList = () => {
   const userDataString = localStorage.getItem("loggedInUser");
   const userData = userDataString ? JSON.parse(userDataString) : null;
 
-  const { isPending, error, data } = useQuery({
+  const { data, isPending, error } = useAuthenticatedQuery({
     queryKey: ["todos"],
-    queryFn: async () => {
-      const { data } = await axiosInstance.get("/users/me?populate=todos", {
-        headers: {
-          Authorization: `Bearer ${userData.jwt}`,
-        },
-      });
-      return data;
+    url: "/users/me?populate=todos",
+    config: {
+      headers: { Authorization: `Bearer ${userData.jwt}` },
     },
   });
 
@@ -34,7 +29,7 @@ const TodoList = () => {
       {data.todos.length ? (
         data.todos.map((todo: any) => (
           <div
-            className="flex items-center justify-between hover:bg-gray-100 duration-300 rounded-md p-2"
+            className="flex items-center justify-between hover:bg-gray-100 hover:cursor-pointer duration-300 rounded-md p-2 even:bg-gray-100"
             key={todo.id}
           >
             <p className="w-full font-semibold">{todo.title}</p>
