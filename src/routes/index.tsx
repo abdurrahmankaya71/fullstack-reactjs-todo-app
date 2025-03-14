@@ -8,6 +8,7 @@ import LoginPage from "../pages/Login";
 import RegisterPage from "../pages/Register";
 import RootLayout from "../pages/Layout";
 import ProtectedRoute from "../components/auth/ProtectedRoutes";
+import Profile from "../pages/Profile";
 
 //* local storage
 const userDataString = localStorage.getItem("loggedInUser");
@@ -24,6 +25,14 @@ const router = createBrowserRouter(
           element={
             <ProtectedRoute isAllowed={isLoggedIn} redirectPath="/login">
               <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="profile"
+          element={
+            <ProtectedRoute isAllowed={isLoggedIn} redirectPath="/login">
+              <Profile />
             </ProtectedRoute>
           }
         />

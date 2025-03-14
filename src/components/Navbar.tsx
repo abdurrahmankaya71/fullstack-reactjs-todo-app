@@ -50,12 +50,15 @@ const Navbar = () => {
                 </NavLink>
               </>
             ) : (
-              <>
-                <span className="text-white">{userData.user.email}</span>
+              <div className="flex items-center gap-4">
+                <Button variant="default">
+                  <NavLink to="/profile">Profile</NavLink>
+                </Button>
+
                 <Button variant={"danger"} onClick={handleLogout}>
                   Logout
                 </Button>
-              </>
+              </div>
             )}
           </div>
         </div>
