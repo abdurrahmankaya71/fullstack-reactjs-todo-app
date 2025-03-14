@@ -1,10 +1,16 @@
+import { useState } from "react";
 import useAuthenticatedQuery from "../hooks/useAuthenticatedQuery";
 import ErrorHandler from "./errors/ErrorHandler";
 import Button from "./ui/Button";
+import Input from "./ui/Input";
+import Modal from "./ui/Modal";
 
 const TodoList = () => {
   const userDataString = localStorage.getItem("loggedInUser");
   const userData = userDataString ? JSON.parse(userDataString) : null;
+
+  //! States
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const { data, isPending, error } = useAuthenticatedQuery({
     queryKey: ["todos"],
@@ -14,9 +20,10 @@ const TodoList = () => {
     },
   });
 
-  // const uniqeTodos = Array.from(
-  //   new Map(data.todos.map((todo) => [todo.documentId, todo]).values())
-  // );
+  //! Handlers
+  const onToggleEditModal = () => {
+    setIsEditModalOpen((prev) => !prev);
+  };
 
   if (isPending) return <h3>'Loading...'</h3>;
 
@@ -34,7 +41,9 @@ const TodoList = () => {
           >
             <p className="w-full font-semibold">{todo.title}</p>
             <div className="flex items-center justify-end w-full space-x-3">
-              <Button size={"sm"}>Edit</Button>
+              <Button size={"sm"} onClick={onToggleEditModal}>
+                Edit
+              </Button>
               <Button variant={"danger"} size={"sm"}>
                 Remove
               </Button>
@@ -44,6 +53,20 @@ const TodoList = () => {
       ) : (
         <h3 className="text-center text-2xl font-semibold">No todos yet</h3>
       )}
+      {/* Edit todo modal */}
+      <Modal
+        isOpen={isEditModalOpen}
+        closeModal={onToggleEditModal}
+        title="Edit this todo"
+      >
+        <Input value={"Edit todo"} />
+        <div className="flex items-center gap-2 mt-4">
+          <Button size={"sm"}>Update</Button>
+          <Button variant={"cancel"} size={"sm"}>
+            Cancel
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };
