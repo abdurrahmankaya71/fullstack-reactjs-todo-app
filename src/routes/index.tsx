@@ -9,6 +9,7 @@ import RegisterPage from "../pages/Register";
 import RootLayout from "../pages/Layout";
 import ProtectedRoute from "../components/auth/ProtectedRoutes";
 import Profile from "../pages/Profile";
+import ErrorHandler from "../components/errors/ErrorHandler";
 
 //* local storage
 const userDataString = localStorage.getItem("loggedInUser");
@@ -19,7 +20,8 @@ const isLoggedIn = userData === null ? false : true;
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<RootLayout />}>
+      {/* Root layout */}
+      <Route path="/" element={<RootLayout />} errorElement={<ErrorHandler />}>
         <Route
           index
           element={
