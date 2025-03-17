@@ -3,13 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../config/axios.config";
 import { AxiosRequestConfig } from "axios";
 
-interface IAuthenticatedQuery {
+interface IGetAuthenticatedQuery {
     queryKey: string[];
     url: string;
     config?: AxiosRequestConfig;
 }
 
-const useAuthenticatedQuery = ({queryKey, url, config}: IAuthenticatedQuery) => {
+const useGetAuthenticatedQuery = ({queryKey, url, config}: IGetAuthenticatedQuery) => {
   return (
     useQuery({
         queryKey: queryKey,
@@ -21,4 +21,4 @@ const useAuthenticatedQuery = ({queryKey, url, config}: IAuthenticatedQuery) => 
   )
 }
 
-export default useAuthenticatedQuery
+export default useGetAuthenticatedQuery;
